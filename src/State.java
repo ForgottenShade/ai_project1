@@ -2,7 +2,7 @@ import java.util.HashSet;
 
 /**
  * 
- * This class holds all information about the state of the environment and the robot
+ * This class holds all information about the state of the board
  *
  */
 public class State implements Cloneable {

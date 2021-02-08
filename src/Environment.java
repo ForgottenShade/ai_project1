@@ -17,7 +17,7 @@ public class Environment {
     public void initFromPercepts(Collection<String> percepts) {
 
 		//TODO: Update as I have no idea what the incoming looks like
-
+		/*
 		currentState = new State();
 		obstacles = new HashSet<Coordinates>();
 		Pattern perceptNamePattern = Pattern.compile("\\(\\s*([^\\s]+).*");
@@ -70,7 +70,7 @@ public class Environment {
 			} else {
 				System.err.println("strange percept that does not match pattern: " + percept);
 			}
-		}
+		}*/
 	}
 	
     /**
@@ -95,6 +95,9 @@ public class Environment {
 	 * @return a list of actions that are possible in the given state
 	 */
 	public List<Action> legalMoves(State state) {
+
+		//TODO: evaluate legal moves by board state
+		/*
 		List<Action> moves = new LinkedList<Action>();
 		if (!state.turned_on) {
 			moves.add(Action.TURN_ON);
@@ -112,7 +115,8 @@ public class Environment {
 			moves.add(Action.TURN_RIGHT);
 			moves.add(Action.TURN_LEFT);
 		}
-		return moves;
+		return moves;*/
+		return null;
 	}
 
 	/**
@@ -122,76 +126,10 @@ public class Environment {
 	 * @return the state resulting from doing a in s
 	 */
 	public State getNextState(State s, Action a) {
-		State succState = s.clone();
-
 		// TODO: fill out this function
 
-		if (a.equals(Action.GO)){
-			switch(s.orientation){
-				case 0: //north
-					s.position.y += 1;
-					break;
-				case 1: //east
-					s.position.x += 1;
-					break;
-				case 2: //south
-					s.position.y -= 1;
-					break;
-				case 3: //west
-					s.position.x -= 1;
-					break;
-				default:
-					System.out.println("Orientation is not 0,1,2 or 3 inside Environment : getNextState");
-					break;
-			}
-		}
-
-		else if (a.equals(Action.SUCK)){
-			if(s.dirt.contains(s.position)){
-				s.dirt.remove(s.position);
-			}
-			return s;
-		}
-
-		else if (a.equals(Action.TURN_LEFT)){
-			if(s.orientation == 0){
-				s.orientation = 3;
-			}else{
-				s.orientation -= 1;
-			}
-			return s;
-		}
-
-		else if (a.equals(Action.TURN_RIGHT)){
-			if(s.orientation == 3){
-				s.orientation = 1;
-			}else{
-				s.orientation += 1;
-			}
-			return s;
-		}
-
-		else if (a.equals(Action.TURN_ON)){
-			if(!s.turned_on){
-				s.turned_on = true;
-			}
-			return s;
-		}
-
-		else if (a.equals(Action.TURN_OFF)){
-			if(s.turned_on){
-				s.turned_on = false;
-			}
-			return s;
-		}
-
-		else{
-			System.out.println("Failed to interpret command.");
-			return s;
-		}
-
-		// System.out.println("move: " + a + " -> next state: " + succState);
-		return succState;
+		System.out.println("Failed to interpret command.");
+		return s;
 	}
 
 	/**
@@ -201,22 +139,7 @@ public class Environment {
 	 * @return the cost of doing action a in state s
 	 */
 	public int getCost(State s, Action a) {
-		switch (a) {
-			case TURN_ON:
-				return 1;
-			case TURN_OFF: // this requires that we only turn the agent off at home
-				return 1+50*s.dirt.size();
-			case TURN_RIGHT:
-				return 1;
-			case TURN_LEFT:
-				return 1;
-			case GO: // this requires that we never do go if there is an obstacle
-				return 1;
-			case SUCK: // this requires that we never suck if there is no dirt
-				return 1;
-			default:
-				return 0;
-		}
+		return 0;
 	}
 
 }
