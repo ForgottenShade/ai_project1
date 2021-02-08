@@ -1,9 +1,6 @@
 
 public enum Action {
-	TURN_ON,
-	TURN_OFF,
-	TURN_RIGHT,
-	TURN_LEFT,
-	GO,
-	SUCK
+	MOVE,
+	CAP_RIGHT,
+	CAP_LEFT
 }

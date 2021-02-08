@@ -1,8 +1,6 @@
 public class PlayerAgent implements Agent{
     @Override
-    public void init(String role, int width, int height, int playclock) {
-
-    }
+    public void init(String role, int width, int height, int playclock) {}
 
     @Override
     public String nextAction(int[] lastmove) {
@@ -10,7 +8,5 @@ public class PlayerAgent implements Agent{
     }
 
     @Override
-    public void cleanup() {
-
-    }
+    public void cleanup() {}
 }
