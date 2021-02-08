@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 public class Environment {
 
 	protected int sizeX, sizeY;
-	protected Coordinates home;
-	protected HashSet<Coordinates> obstacles;
 	protected State currentState;
 
 	public Environment(Collection<String> percepts) {
@@ -17,15 +15,9 @@ public class Environment {
 	}
 	
     public void initFromPercepts(Collection<String> percepts) {
-		/*
-			Possible percepts are:
-			- "(SIZE x y)" denoting the size of the environment, where x,y are integers
-			- "(HOME x y)" with x,y >= 1 denoting the initial position of the robot
-			- "(ORIENTATION o)" with o in {"NORTH", "SOUTH", "EAST", "WEST"} denoting the initial orientation of the robot
-			- "(AT o x y)" with o being "DIRT" or "OBSTACLE" denoting the position of a dirt or an obstacle
-			Moving north increases the y coordinate and moving east increases the x coordinate of the robots position.
-			The robot is turned off initially, so don't forget to turn it on.
-		*/
+
+		//TODO: Update as I have no idea what the incoming looks like
+
 		currentState = new State();
 		obstacles = new HashSet<Coordinates>();
 		Pattern perceptNamePattern = Pattern.compile("\\(\\s*([^\\s]+).*");
