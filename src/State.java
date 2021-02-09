@@ -32,7 +32,12 @@ public class State implements Cloneable {
 
 		public boolean equals(Object o) {
 			//TODO
-			return false;
+			if (!(o instanceof State)) { 
+				return false;
+			}
+			
+			State s = (State) o;
+			return s.pawns_black.equals(pawns_black) && s.pawns_white.equals(pawns_white);
 		}
 
 		private void init_white(){
