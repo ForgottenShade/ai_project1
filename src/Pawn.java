@@ -1,11 +1,13 @@
 public class Pawn {
     public Coordinates position;
     public Team team;
+    public int id;
 
-    public Pawn(int x, int y, Team _team){
+    public Pawn(int x, int y, int _id, Team _team){
         position.x = x;
         position.y = y;
         team = _team;
+        id = id;
     }
 
     public void Move(Action _move){

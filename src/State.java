@@ -36,19 +36,23 @@ public class State implements Cloneable {
 		}
 
 		private void init_white(){
+			int id_counter = 0;
 			for(int y = 0; y < 2; y++){
 				for(int x = 0; x < this.width; x++){
-					Pawn new_pawn = new Pawn(x, y, Team.WHITE);
+					Pawn new_pawn = new Pawn(x, y, id_counter, Team.WHITE);
 					pawns_white.add(new_pawn);
+					id_counter++;
 				}
 			}
 		}
 
 		private void init_black(){
+			int id_counter = 0;
 			for(int y = 0; y < 2; y++){
 				for(int x = 0; x < this.width; x++){
-					Pawn new_pawn = new Pawn(x, height-y, Team.WHITE);
-					pawns_white.add(new_pawn);
+					Pawn new_pawn = new Pawn(x, height-y, id_counter, Team.BLACK);
+					pawns_black.add(new_pawn);
+					id_counter++;
 				}
 			}
 		}
