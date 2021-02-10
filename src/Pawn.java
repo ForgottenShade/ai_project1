@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Pawn {
     public Coordinates position;
     public Team team;
@@ -8,6 +10,19 @@ public class Pawn {
         position.y = y;
         team = _team;
         id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pawn pawn = (Pawn) o;
+        return id == pawn.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public void Move(Action _move){
