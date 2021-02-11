@@ -12,25 +12,76 @@ public class State implements Cloneable {
 		public ArrayList<Pawn> pawns_white;
 		public ArrayList<Pawn> pawns_black;
 		public int width, height;
+		protected short[][] myMap;
+		protected boolean isWhiteTurn;
+		protected int eval; 
+
 
 		public State(int _width, int _height) {
 			//initialize the starting state of the game
-			this.init_white();
-			this.init_black();
-			this.width = _width;
 			this.height = _height;
+			this.width = _width;
+			myMap = new short[width][height]; // the TA has [2][2] instead of width and height... I have no idea why.
+			isWhiteTurn = true;
+			eval = 0; 
 		}
 
+		public String toString() {
+			System.out.println("myMapLength: " + myMap.length + " , " + myMap[0].length);
+			String toRet = "isWhiteTurn: " + isWhiteTurn;
+			if (myMap != null && myMap.length > 0 && myMap[0].length > 0){
+				toRet += "\nMap: \n";
+				for (int j = myMap[0].length - 1; j >= 0 ; j--){ // for each row, we have to go from up to down
+	
+					for (int i = 0; i < myMap.length; i++){ // for each column
+						if (myMap[i][j] == 0){
+							toRet += "- "; // represents empty space
+						}
+						else if (myMap[i][j] == 1){
+							toRet += "W "; // represents white piece
+						}
+						else if (myMap[i][j] == 2){
+							toRet += "B "; // represents black piece
+						}
+						else { // this should never happen, but good to have just in case
+							System.out.println("--Error-- State : toString() -> myMap[i][j] is not 0, 1 or 2");
+						}
+					}
+					toRet += "\n";
+				}
+			}
+			else {
+				toRet += "--Error-- State : toString() -> could not print out map";
+			}
+			return toRet;
+		}
+
+		
 		@SuppressWarnings("unchecked")
 		public State clone() {
 			State cloned;
 			try {
 				cloned = (State)super.clone();
-				cloned.pawns_white = (ArrayList<Pawn>) pawns_white.clone();
-				cloned.pawns_black = (ArrayList<Pawn>) pawns_black.clone();
+				short[][] newMap = new short[myMap.length][]; // we cannot directly clone 2D arrays so we need to iterate
+				for (int i = 0; i < myMap.length; i++){newMap[i] = myMap[i].clone();};
+				cloned.myMap = newMap;
+				cloned.isWhiteTurn = isWhiteTurn; // make sure to change the current player somewhere
 			} catch (CloneNotSupportedException e) { e.printStackTrace(); System.exit(-1); cloned=null; }
 			return cloned;
 		}
+	
+	
+	
+		// @SuppressWarnings("unchecked")
+		// public State clone() {
+		// 	State cloned;
+		// 	try {
+		// 		cloned = (State)super.clone();
+		// 		cloned.pawns_white = (ArrayList<Pawn>) pawns_white.clone();
+		// 		cloned.pawns_black = (ArrayList<Pawn>) pawns_black.clone();
+		// 	} catch (CloneNotSupportedException e) { e.printStackTrace(); System.exit(-1); cloned=null; }
+		// 	return cloned;
+		// }
 
 		public boolean equals(Object o) {
 			//TODO
@@ -39,59 +90,61 @@ public class State implements Cloneable {
 			}
 			
 			State s = (State) o;
-			return s.pawns_black.equals(pawns_black) && s.pawns_white.equals(pawns_white);
+			return s.myMap.equals(myMap);
 		}
 
-		private void init_white(){
-			int id_counter = 0;
-			for(int y = 0; y < 2; y++){
-				for(int x = 0; x < this.width; x++){
-					Pawn new_pawn = new Pawn(x, y, id_counter, Team.WHITE);
-					pawns_white.add(new_pawn);
-					id_counter++;
-				}
-			}
-		}
+		// private void init_white(){
+		// 	int id_counter = 0;
+		// 	for(int y = 0; y < 2; y++){
+		// 		for(int x = 0; x < this.width; x++){
+		// 			Pawn new_pawn = new Pawn(x, y, id_counter, Team.WHITE);
+		// 			pawns_white.add(new_pawn);
+		// 			id_counter++;
+		// 		}
+		// 	}
+		// }
+	
+		// private void init_black(){
+		// 	int id_counter = 0;
+		// 	for(int y = 0; y < 2; y++){
+		// 		for(int x = 0; x < this.width; x++){
+		// 			Pawn new_pawn = new Pawn(x, height-y, id_counter, Team.BLACK);
+		// 			pawns_black.add(new_pawn);
+		// 			id_counter++;
+		// 		}
+		// 	}
+		// }
+	
 
-		private void init_black(){
-			int id_counter = 0;
-			for(int y = 0; y < 2; y++){
-				for(int x = 0; x < this.width; x++){
-					Pawn new_pawn = new Pawn(x, height-y, id_counter, Team.BLACK);
-					pawns_black.add(new_pawn);
-					id_counter++;
-				}
-			}
-		}
 
-		//check if a pawn can move forward
-		public boolean can_move(Pawn _pawn, int x, int y){
-			//find the position after the move
-			Coordinates new_pos;
-			if(_pawn.team == Team.WHITE){
-				new_pos = new Coordinates(_pawn.position.x, _pawn.position.y + 1);
-			}else {
-				new_pos = new Coordinates(_pawn.position.x, _pawn.position.y - 1);
-			}
+		// //check if a pawn can move forward
+		// public boolean can_move(Pawn _pawn, int x, int y){
+		// 	//find the position after the move
+		// 	Coordinates new_pos;
+		// 	if(_pawn.team == Team.WHITE){
+		// 		new_pos = new Coordinates(_pawn.position.x, _pawn.position.y + 1);
+		// 	}else {
+		// 		new_pos = new Coordinates(_pawn.position.x, _pawn.position.y - 1);
+		// 	}
 
-			//check against white pawns
-			for(int i = 0; i < pawns_white.size(); i++){
-				Pawn other_pawn = pawns_white.get(i);
-				if(other_pawn.position == new_pos){
-					return false;
-				}
-			}
+		// 	//check against white pawns
+		// 	for(int i = 0; i < pawns_white.size(); i++){
+		// 		Pawn other_pawn = pawns_white.get(i);
+		// 		if(other_pawn.position == new_pos){
+		// 			return false;
+		// 		}
+		// 	}
 
-			//check against black pawns
-			for(int i = 0; i < pawns_black.size(); i++){
-				Pawn other_pawn = pawns_black.get(i);
-				if(other_pawn.position == new_pos){
-					return false;
-				}
-			}
+		// 	//check against black pawns
+		// 	for(int i = 0; i < pawns_black.size(); i++){
+		// 		Pawn other_pawn = pawns_black.get(i);
+		// 		if(other_pawn.position == new_pos){
+		// 			return false;
+		// 		}
+		// 	}
 
-			return true;
-		}
+		// 	return true;
+		// }
 
 
 		//check if a pawn can capture another and return the action required to do so, null if not

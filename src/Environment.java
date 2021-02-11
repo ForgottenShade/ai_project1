@@ -19,7 +19,7 @@ public class Environment {
 	//CODE FROM SKELETON
 	// this does not need to be fast code since it is only run once
     public void initFromInput(int w, int h){
-        currentState = new State();
+        currentState = new State(w, h);
         map = new short[w][h];
         // initialize the map
         for (int i = 0; i < w; i++){ // for each column
@@ -80,36 +80,42 @@ public class Environment {
 					moves.add(new Moves(x,y,x,y+1));
 				}
 			}
-			else{
-				if (y>0) {  //see if we are not at white´s end of the map to avoid null poointers
-					//left diagonal
-					if (x > 0) {  //if we are not at the LEFT end of the map then we check if we can go diagonal left
-						if (s.myMap[x-1][y-1] != 2) {  //if the bottom left square is either empty or has white piece (not black piece)
-							moves.add(new Moves(x,y,x-1,y-1));
-						}
+		}
+		else{
+			if (y>0) {  //see if we are not at white´s end of the map to avoid null poointers
+				//left diagonal
+				if (x > 0) {  //if we are not at the LEFT end of the map then we check if we can go diagonal left
+					if (s.myMap[x-1][y-1] != 2) {  //if the bottom left square is either empty or has white piece (not black piece)
+						moves.add(new Moves(x,y,x-1,y-1));
 					}
-					//right diagonal
-					if (x < s.myMap.length-1) { //if we are not at the RIGHT end of the map then we check if we can go diagonal right
-						if (s.myMap[x+1][y-1] != 2) { //if the bottom right square is either empty or has white piece (not black piece)
-							moves.add(new Moves(x,y,x+1,y-1));
-						}
+				}
+				//right diagonal
+				if (x < s.myMap.length-1) { //if we are not at the RIGHT end of the map then we check if we can go diagonal right
+					if (s.myMap[x+1][y-1] != 2) { //if the bottom right square is either empty or has white piece (not black piece)
+						moves.add(new Moves(x,y,x+1,y-1));
 					}
-					//forward
-					if(s.myMap[x][y-1] == 0) {  //if the square below is empty
-						moves.add(new Moves(x,y,x,y-1));
-					}
+				}
+				//forward
+				if(s.myMap[x][y-1] == 0) {  //if the square below is empty
+					moves.add(new Moves(x,y,x,y-1));
 				}
 			}
 		}
+		
         return moves;
     }
 
     public State getNextState(State s, Moves m){
         State c = s.clone();
         // todo
-		// if (c.isWhiteTurn) {
-
-		// }
+		if (c.isWhiteTurn) {
+			c.myMap[m.x][m.y] = 0;
+			c.myMap[m.x2][m.y2] = 1;
+		}
+		else{
+			c.myMap[m.x][m.y] = 0;
+			c.myMap[m.x2][m.y2] = 2;
+		}
         return c;
     }
 
@@ -138,6 +144,7 @@ public class Environment {
     public String toString() {
         return currentState.toString();
     }
+	
 
 
 
