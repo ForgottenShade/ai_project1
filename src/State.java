@@ -9,8 +9,8 @@ import java.util.Iterator;
  *
  */
 public class State implements Cloneable {
-		public ArrayList<Pawn> pawns_white;
-		public ArrayList<Pawn> pawns_black;
+		//public ArrayList<Pawn> pawns_white;
+		//public ArrayList<Pawn> pawns_black;
 		public int width, height;
 		protected short[][] myMap;
 		protected boolean isWhiteTurn;
@@ -149,6 +149,7 @@ public class State implements Cloneable {
 
 		//check if a pawn can capture another and return the action required to do so, null if not
 		//TODO: Handle the case when can capture on both sides
+	/*
 		public Action can_capture(Pawn _pawn){
 			//find the new position after the move
 			Coordinates cap_left;
@@ -188,6 +189,7 @@ public class State implements Cloneable {
 
 			return null;
 		}
+	*/
 
 		// use this function to prevent duplicate states
 		// but this hash functio does not guarantee unique states, we need to store the
