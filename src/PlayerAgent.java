@@ -89,7 +89,19 @@ public class PlayerAgent implements Agent{
         }
         else{
             // todo
-            return null;
+            int best_val = 0;
+            Node best_node = null;
+            for(int i = 0; i < frontierList.size(); i++){
+                Node _node = frontierList.get(i);
+                if(best_node == null){
+                    best_node = _node;
+                    best_val = _node.evaluation;
+                }else if(_node.evaluation < best_val){
+                    best_node = _node;
+                    best_val = _node.evaluation;
+                }
+            }
+            return best_node;
         }
     }
 
