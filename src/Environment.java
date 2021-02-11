@@ -145,7 +145,12 @@ public class Environment {
         return currentState.toString();
     }
 	
-
+	public State updateState(int x1, int y1, int x2, int y2){
+		short moved_piece = currentState.myMap[x1][y1];
+		currentState.myMap[x2][y2] = moved_piece;
+		currentState.myMap[x1][y1] = 0;
+		return currentState;
+	}
 
 
 

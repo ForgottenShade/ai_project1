@@ -45,6 +45,7 @@ public class PlayerAgent implements Agent{
             }
             System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             // TODO: 1. update your internal world model according to the action that was just executed
+            env.updateState(x1, y1, x2, y2);
 
         }
 
@@ -107,5 +108,15 @@ public class PlayerAgent implements Agent{
     @Override
     public void cleanup() {
         // TODO: cleanup so that he agent is ready for the next match
+        this.team = null;
+        this.playclock = -1;
+        this.height = -1;
+        this.width = -1;
+        this.myTurn = false;
+        this.env = null;
+        this.frontierList = null;
+        this.isWhiteTurn = false;
+        this.sizeOfTable = -1;
+
     }
 }
