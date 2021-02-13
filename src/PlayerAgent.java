@@ -57,7 +57,7 @@ public class PlayerAgent implements Agent{
         if (myTurn){
             Node c_node = new Node(env.currentState, env.currentState.eval);
             doSearch(c_node, 1);
-            String ret_str = "move " + current_solution.move.x + " " + current_solution.move.y + " " + current_solution.move.x2 + " " + current_solution.move.y2;
+            String ret_str = "(move " + current_solution.move.x + " " + current_solution.move.y + " " + current_solution.move.x2 + " " + current_solution.move.y2 + ")";
             return ret_str;
             }
 

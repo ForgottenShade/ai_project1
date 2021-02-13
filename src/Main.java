@@ -8,7 +8,7 @@ public class Main {
 	 */
 	public static void main(String[] args){
 		try{
-			
+			/*
 			// my recommended todos in order:
 			// 1. Create an Environment and State using Lab3 as a guide. It should have Environment.initialize() and State.clone()
 			Environment env5_10 = new Environment(5, 10); // create a new map with x = 6 and h = 10 (6 columns and 10 rows)
@@ -120,7 +120,7 @@ public class Main {
 				//
 
 
-			/*
+			*/
 			// TODO: put in your agent here
 			//Agent agent = new PlayerAgent();
 			Agent agent = new RandomAgent();
@@ -131,7 +131,7 @@ public class Main {
 			}
 			GamePlayer gp=new GamePlayer(port, agent);
 			gp.waitForExit();
-			*/
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 			System.exit(-1);
