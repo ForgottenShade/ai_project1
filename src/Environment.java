@@ -39,17 +39,18 @@ public class Environment {
     }
 
     //taking the legal moves, generate all possible states
-    public List<State> legalStates(Node _node){
+    public List<Node> legalNodes(Node _node){
 		List<Moves> _legal_moves = legalMoves(_node.state);
-		List<State> _legal_states = new LinkedList<State>();
+		List<Node> _legal_nodes = new LinkedList<Node>();
 
 		for(int i = 0; i < _legal_moves.size(); i++){
 			State _new_state = _node.state.clone();
+			Node _new_node;
 			_new_state.applyMove(_legal_moves.get(i));
-			_legal_states.add(_new_state);
+			_new_node = new Node(_node, _new_state, _legal_moves.get(i), 0);
 		}
 
-		return  _legal_states;
+		return  _legal_nodes;
 	}
 
 	//CODE FROM TA VIDEO/////////////////////////////////
