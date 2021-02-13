@@ -49,7 +49,7 @@ public class PlayerAgent implements Agent{
             }
             System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             // TODO: 1. update your internal world model according to the action that was just executed
-            env.updateState(x1, y1, x2, y2);
+            env.updateState(x1 - 1, y1 - 1, x2 - 1, y2 - 1);
 
         }
 
@@ -57,8 +57,7 @@ public class PlayerAgent implements Agent{
         if (myTurn){
             Node c_node = new Node(env.currentState, env.currentState.eval);
             doSearch(c_node, 1);
-            String ret_str = "(move " + current_solution.move.x + " " + current_solution.move.y + " " + current_solution.move.x2 + " " + current_solution.move.y2 + ")";
-            return ret_str;
+            return current_solution.toString();
             }
 
              //int alpha = Integer.MAX_VALUE;
@@ -73,7 +72,7 @@ public class PlayerAgent implements Agent{
 
             // The format of what has to be returned. 
             // return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
-        return null;
+        return "noop";
     }
 
     public int doSearch(Node _parent_node,int depth){
@@ -103,11 +102,11 @@ public class PlayerAgent implements Agent{
                     }
                 }
 
+                depth++;
                 return bestVal;
             } catch (RuntimeException e) {
                 return bestVal;
             }
-            depth++;
         }
     }
 
@@ -136,7 +135,7 @@ public class PlayerAgent implements Agent{
     }
 
     public void expandNode(Node _node) {
-        boolean isTimeUp = true; // of course change this
+        boolean isTimeUp = false; // of course change this
         if (isTimeUp){
             throw new RuntimeException();
         }

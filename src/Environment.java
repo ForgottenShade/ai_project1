@@ -46,8 +46,9 @@ public class Environment {
 		for(int i = 0; i < _legal_moves.size(); i++){
 			State _new_state = _node.state.clone();
 			Node _new_node;
-			_new_state.applyMove(_legal_moves.get(i));
-			_new_node = new Node(_node, _new_state, _legal_moves.get(i), 0);
+			//_new_state.applyMove(_legal_moves.get(i));
+			_new_node = new Node(_node, getNextState(_node.state, _legal_moves.get(i)), _legal_moves.get(i), 0);
+			_legal_nodes.add(_new_node);
 		}
 
 		return  _legal_nodes;

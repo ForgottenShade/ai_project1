@@ -123,7 +123,7 @@ public class Main {
 			*/
 			// TODO: put in your agent here
 			//Agent agent = new PlayerAgent();
-			Agent agent = new RandomAgent();
+			Agent agent = new PlayerAgent();
 
 			int port=4001;
 			if(args.length>=1){
