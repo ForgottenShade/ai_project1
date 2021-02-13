@@ -6,6 +6,7 @@ public class Node {
     public Node parent;
     public int depth;
     public int evaluation;
+    public Moves move;
 
     /**
      * create the root node of the search tree
@@ -24,11 +25,12 @@ public class Node {
      * @param state the state belonging to this node
      * @param val the evaluation of this node
      */
-    public Node(Node parent, State state, int val) {
+    public Node(Node parent, State state, Moves _move, int val) {
         this.parent = parent;
         this.state = state;
         this.depth = parent.depth + 1;
         this.evaluation = val;
+        this.move = _move;
     }
 
 

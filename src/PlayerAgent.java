@@ -57,6 +57,8 @@ public class PlayerAgent implements Agent{
         if (myTurn){
             Node c_node = new Node(env.currentState, env.currentState.eval);
             doSearch(c_node, 1);
+            String ret_str = "move " + current_solution.move.x + " " + current_solution.move.y + " " + current_solution.move.x2 + " " + current_solution.move.y2;
+            return ret_str;
             }
 
              //int alpha = Integer.MAX_VALUE;
@@ -140,10 +142,9 @@ public class PlayerAgent implements Agent{
         }
         // for each available move...
         // update frontier list
-        List<State> _legal_states = env.legalStates(_node);
-        for(int i = 0; i < _legal_states.size(); i++){
-            Node newNode = new Node(_node, _legal_states.get(i), 0);
-            frontierList.add(newNode);
+        List<Node> _legal_nodes = env.legalNodes(_node);
+        for(int i = 0; i < _legal_nodes.size(); i++){
+            frontierList.add(_legal_nodes.get(i));
         }
         frontierList.remove(_node);
         // ...
