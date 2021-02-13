@@ -38,6 +38,20 @@ public class Environment {
         currentState.myMap = map;
     }
 
+    //taking the legal moves, generate all possible states
+    public List<State> legalStates(Node _node){
+		List<Moves> _legal_moves = legalMoves(_node.state);
+		List<State> _legal_states = new LinkedList<State>();
+
+		for(int i = 0; i < _legal_moves.size(); i++){
+			State _new_state = _node.state.clone();
+			_new_state.applyMove(_legal_moves.get(i));
+			_legal_states.add(_new_state);
+		}
+
+		return  _legal_states;
+	}
+
 	//CODE FROM TA VIDEO/////////////////////////////////
 
     // get all moves for current player

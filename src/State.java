@@ -70,7 +70,12 @@ public class State implements Cloneable {
 			return cloned;
 		}
 	
-	
+		public State applyMove(Moves _move){
+			short moved_piece = myMap[_move.x][_move.y];
+			myMap[_move.x2][_move.y2] = moved_piece;
+			myMap[_move.x][_move.y] = 0;
+			return this;
+		}
 	
 		// @SuppressWarnings("unchecked")
 		// public State clone() {

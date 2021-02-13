@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class PlayerAgent implements Agent{
@@ -56,6 +58,10 @@ public class PlayerAgent implements Agent{
             while (true){ // some loop that goes on until a RuntimeException is thrown.
                 try{
                     // do your search here
+                    Node pathNode = findNextNodeToExpand();
+                    for(int i = 0; i < depth; i++){
+                        expandNode(pathNode);
+                    }
                     return "noop"; // This has to be changed
                 }catch(RuntimeException e){
 
@@ -89,6 +95,7 @@ public class PlayerAgent implements Agent{
         }
         else{
             // todo
+            // this presently gets the node with the best evaluation as in a* before using dfs and iterative deepening upon that node
             int best_val = 0;
             Node best_node = null;
             for(int i = 0; i < frontierList.size(); i++){
@@ -105,14 +112,19 @@ public class PlayerAgent implements Agent{
         }
     }
 
-    public void expandNode() {
+    public void expandNode(Node _node) {
         boolean isTimeUp = true; // of course change this
         if (isTimeUp){
             throw new RuntimeException();
         }
         // for each available move...
         // update frontier list
-
+        List<State> _legal_states = env.legalStates(_node);
+        for(int i = 0; i < _legal_states.size(); i++){
+            Node newNode = new Node(_node, _legal_states.get(i), 0);
+            frontierList.add(newNode);
+        }
+        frontierList.remove(_node);
         // ...
 
     }
