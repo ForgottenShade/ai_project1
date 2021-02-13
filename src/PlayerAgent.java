@@ -59,7 +59,7 @@ public class PlayerAgent implements Agent{
         if (myTurn){
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
             doSearch(c_node, 1);
-            //minimax(c_node, 3, true);
+            //minimax(c_node, 3, true); // minimax(c_node, 3, -1000, 1000, true)
             //System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
             return current_solution.move.toString();
             
@@ -115,7 +115,7 @@ public class PlayerAgent implements Agent{
         }
     }
 
-    public int minimax(Node position, int depth, boolean maxPlayer){
+    public int minimax(Node position, int depth, boolean maxPlayer){ // (Node postition, int depth, int alpha, int beta, boolean maxPlayer)
         // sooo.... this sometimes doesn't work... because of indexOutOfBounds things
         // and what not. BUT it sometimes does work...... but the evaluations is still
         // garbage so our agent isn't any smarter for it... if anything this just
@@ -126,29 +126,41 @@ public class PlayerAgent implements Agent{
         if (depth == 0 || position.state.isTerminal){
             return env.eval(position.state);
         }
-        ArrayList<Node> tempFrontier = frontierList; // this garbage is here because of the IOB shit
-        expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh* 
+        // ArrayList<Node> tempFrontier = frontierList; // this garbage is here because of the IOB shit
+        // expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh* 
         if (frontierList.size() > 0){
-            frontierList = tempFrontier;
+            // frontierList = tempFrontier; // // part of the garbage mentioned
             if (maxPlayer){
                 int maxEval = -1000;
                 for (int i = 0; i < frontierList.size(); i++){
-                    int eval = minimax(frontierList.get(i), depth - 1, false);
+                    int eval = minimax(frontierList.get(i), depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
-                        current_solution = frontierList.get(i);
+                        //current_solution = frontierList.get(i);
                     }
+                    // if (eval > alpha){
+                    //     alpha = eval;
+                    // }
+                    // if (beta <= alpha){
+                    //     break;
+                    // }
                 }
                 return maxEval;
             }
             else {
                 int minEval = 1000;
                 for (int j = 0; j < frontierList.size(); j++){
-                    int eval = minimax(frontierList.get(j), depth - 1, true);
+                    int eval = minimax(frontierList.get(j), depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
-                        current_solution = frontierList.get(j);
+                        //current_solution = frontierList.get(j);
                     }
+                    // if (eval < beta){
+                    //     beta = eval;
+                    // }
+                    // if (beta <= alpha){
+                    //     break;
+                    // }
                 }
                 return minEval;
             }
