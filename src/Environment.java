@@ -44,7 +44,7 @@ public class Environment {
 		List<Node> _legal_nodes = new LinkedList<Node>();
 
 		for(int i = 0; i < _legal_moves.size(); i++){
-			State _new_state = _node.state.clone();
+			//State _new_state = _node.state.clone();
 			Node _new_node;
 			//_new_state.applyMove(_legal_moves.get(i));
 			_new_node = new Node(_node, getNextState(_node.state, _legal_moves.get(i)), _legal_moves.get(i), 0);
@@ -53,8 +53,6 @@ public class Environment {
 
 		return  _legal_nodes;
 	}
-
-	//CODE FROM TA VIDEO/////////////////////////////////
 
     // get all moves for current player
     public List<Moves> legalMoves(State state) {
@@ -135,7 +133,7 @@ public class Environment {
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 2;
 		}
-		c.eval = eval(c);
+		//c.eval = eval(c);
         return c;
     }
 
@@ -149,8 +147,12 @@ public class Environment {
 
         for (int i = 0; i < s.myMap.length; i++){ // for each column
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
-                if (s.myMap[i][j] == 1){whitePieces++;}
-                else if (s.myMap[i][j] == 2){blackPieces++;}
+                if (s.myMap[i][j] == 1){
+					whitePieces++;
+				}
+                else if (s.myMap[i][j] == 2){
+					blackPieces++;
+				}
             }
         }
         e = whitePieces - blackPieces;

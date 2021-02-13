@@ -16,6 +16,7 @@ public class PlayerAgent implements Agent{
     private ArrayList<Node> frontierList;
     private int sizeOfTable = 1000;
     private Node current_solution = null;
+    private AdversarialSearch minimax;
 
     @Override
     public void init(String role, int width, int height, int playclock) {
@@ -58,7 +59,10 @@ public class PlayerAgent implements Agent{
         if (myTurn){
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
             doSearch(c_node, 1);
+            //minimax(c_node, 3, true);
+            //System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
             return current_solution.move.toString();
+            
             }
 
              //int alpha = Integer.MAX_VALUE;
@@ -84,7 +88,7 @@ public class PlayerAgent implements Agent{
             try {
                 // do your search here
                 if (_parent_node.state.isTerminal) {
-                    return _parent_node.evaluation;
+                    return env.eval(_parent_node.state);
                 }
 
                 expandNode(_parent_node);
@@ -111,6 +115,47 @@ public class PlayerAgent implements Agent{
         }
     }
 
+    public int minimax(Node position, int depth, boolean maxPlayer){
+        // sooo.... this sometimes doesn't work... because of indexOutOfBounds things
+        // and what not. BUT it sometimes does work...... but the evaluations is still
+        // garbage so our agent isn't any smarter for it... if anything this just
+        // makes it dumber.
+
+        // We might have to check how the expansion is happening.
+        // And attach runtimeException to this
+        if (depth == 0 || position.state.isTerminal){
+            return env.eval(position.state);
+        }
+        ArrayList<Node> tempFrontier = frontierList; // this garbage is here because of the IOB shit
+        expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh* 
+        if (frontierList.size() > 0){
+            frontierList = tempFrontier;
+            if (maxPlayer){
+                int maxEval = -1000;
+                for (int i = 0; i < frontierList.size(); i++){
+                    int eval = minimax(frontierList.get(i), depth - 1, false);
+                    if (eval > maxEval){
+                        maxEval = eval;
+                        current_solution = frontierList.get(i);
+                    }
+                }
+                return maxEval;
+            }
+            else {
+                int minEval = 1000;
+                for (int j = 0; j < frontierList.size(); j++){
+                    int eval = minimax(frontierList.get(j), depth - 1, true);
+                    if (eval < minEval){
+                        minEval = eval;
+                        current_solution = frontierList.get(j);
+                    }
+                }
+                return minEval;
+            }
+        }
+        return env.eval(position.state);
+    }
+
     public Node findNextNodeToExpand() {
         if (frontierList.isEmpty()){
             System.out.println("MyAgent : findNextNodeToExpand() -> frontierList is empty");
@@ -125,10 +170,10 @@ public class PlayerAgent implements Agent{
                 Node _node = frontierList.get(i);
                 if(best_node == null){
                     best_node = _node;
-                    best_val = _node.evaluation;
-                }else if(_node.evaluation < best_val){
+                    best_val = env.eval(_node.state);
+                }else if(env.eval(_node.state) < best_val){
                     best_node = _node;
-                    best_val = _node.evaluation;
+                    best_val = env.eval(_node.state);
                 }
             }
             return best_node;
