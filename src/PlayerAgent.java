@@ -15,6 +15,7 @@ public class PlayerAgent implements Agent{
     private Environment env;
     private ArrayList<Node> frontierList;
     private int sizeOfTable = 1000;
+    private Node current_solution = null;
 
     @Override
     public void init(String role, int width, int height, int playclock) {
@@ -70,30 +71,33 @@ public class PlayerAgent implements Agent{
 
             // The format of what has to be returned. 
             // return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
-
-        }
-        else {
-            return "noop";
-        }
+        return null;
     }
 
     public int doSearch(Node _parent_node,int depth){
         int value;
-        int bestVal;
+        int bestVal = 0;
 
         while (true) { // some loop that goes on until a RuntimeException is thrown.
             try {
                 // do your search here
                 if (_parent_node.isTerminal) {
-                    return _parent_node.value;
+                    return _parent_node.evaluation;
                 }
 
                 expandNode(_parent_node);
 
                 for(int i = 0; i < depth; i++) {
                     for (int j = 0; j < frontierList.size(); j++) {
+                        if(current_solution == null){
+                            current_solution = frontierList.get(j);
+                        }
+
                         value = doSearch(frontierList.get(j), depth);
-                        bestVal = max(value, bestVal);
+                        if(value > bestVal){
+                            bestVal = value;
+                            current_solution = frontierList.get(j);
+                        }
                     }
                 }
 
