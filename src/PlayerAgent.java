@@ -39,25 +39,26 @@ public class PlayerAgent implements Agent{
 
     @Override
     public String nextAction(int[] lastMove) {
+        System.out.println(env.currentState);
         if (lastMove != null) {
             int x1 = lastMove[0], y1 = lastMove[1], x2 = lastMove[2], y2 = lastMove[3];
             String roleOfLastPlayer;
             if (myTurn && team.equals(Team.WHITE) || !myTurn && team.equals(Team.BLACK)) {
-                roleOfLastPlayer = "white";
-            } else {
                 roleOfLastPlayer = "black";
+            } else {
+                roleOfLastPlayer = "white";
             }
             System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             // TODO: 1. update your internal world model according to the action that was just executed
             env.updateState(x1 - 1, y1 - 1, x2 - 1, y2 - 1);
+          
 
         }
-
         myTurn = !myTurn;
         if (myTurn){
-            Node c_node = new Node(env.currentState, env.currentState.eval);
+            Node c_node = new Node(env.currentState, env.eval(env.currentState));
             doSearch(c_node, 1);
-            return current_solution.toString();
+            return current_solution.move.toString();
             }
 
              //int alpha = Integer.MAX_VALUE;

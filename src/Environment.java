@@ -135,6 +135,7 @@ public class Environment {
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 2;
 		}
+		c.eval = eval(c);
         return c;
     }
 
