@@ -115,10 +115,11 @@ public class PlayerAgent implements Agent{
         }
     }
 
+    // BEHOLD! ~The Garbagé~
     public int minimax(Node position, int depth, boolean maxPlayer){ // (Node postition, int depth, int alpha, int beta, boolean maxPlayer)
         // sooo.... this sometimes doesn't work... because of indexOutOfBounds things
         // and what not. BUT it sometimes does work...... but the evaluations is still
-        // garbage so our agent isn't any smarter for it... if anything this just
+        // not great so our agent isn't any smarter for it... if anything this just
         // makes it dumber.
 
         // We might have to check how the expansion is happening.
@@ -127,7 +128,7 @@ public class PlayerAgent implements Agent{
             return env.eval(position.state);
         }
         // ArrayList<Node> tempFrontier = frontierList; // this garbage is here because of the IOB shit
-        // expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh* 
+        expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh* 
         if (frontierList.size() > 0){
             // frontierList = tempFrontier; // // part of the garbage mentioned
             if (maxPlayer){
@@ -136,7 +137,7 @@ public class PlayerAgent implements Agent{
                     int eval = minimax(frontierList.get(i), depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
-                        //current_solution = frontierList.get(i);
+                        current_solution = frontierList.get(i); // the thing that causes IOB
                     }
                     // if (eval > alpha){
                     //     alpha = eval;
@@ -153,7 +154,7 @@ public class PlayerAgent implements Agent{
                     int eval = minimax(frontierList.get(j), depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
-                        //current_solution = frontierList.get(j);
+                        current_solution = frontierList.get(j);
                     }
                     // if (eval < beta){
                     //     beta = eval;
