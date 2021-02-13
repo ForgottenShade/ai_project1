@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -53,22 +54,10 @@ public class PlayerAgent implements Agent{
 
         myTurn = !myTurn;
         if (myTurn){
-            int depth = 1;
-
-            while (true){ // some loop that goes on until a RuntimeException is thrown.
-                try{
-                    // do your search here
-                    Node pathNode = findNextNodeToExpand();
-                    for(int i = 0; i < depth; i++){
-                        expandNode(pathNode);
-                    }
-                    return "noop"; // This has to be changed
-                }catch(RuntimeException e){
-
-                }
-                depth ++;
-
+            Node c_node = new Node(env.currentState, env.currentState.eval);
+            doSearch(c_node, 1);
             }
+
              //int alpha = Integer.MAX_VALUE;
             //int beta = -Integer.MAX_VALUE; // you cannot do Integer.Min_Value since if you do -MinValue you will overflow the buffer.
             // TODO: 2. run alpha-beta search to determine the best move
@@ -85,6 +74,34 @@ public class PlayerAgent implements Agent{
         }
         else {
             return "noop";
+        }
+    }
+
+    public int doSearch(Node _parent_node,int depth){
+        int value;
+        int bestVal;
+
+        while (true) { // some loop that goes on until a RuntimeException is thrown.
+            try {
+                // do your search here
+                if (_parent_node.isTerminal) {
+                    return _parent_node.value;
+                }
+
+                expandNode(_parent_node);
+
+                for(int i = 0; i < depth; i++) {
+                    for (int j = 0; j < frontierList.size(); j++) {
+                        value = doSearch(frontierList.get(j), depth);
+                        bestVal = max(value, bestVal);
+                    }
+                }
+
+                return bestVal;
+            } catch (RuntimeException e) {
+                return bestVal;
+            }
+            depth++;
         }
     }
 
