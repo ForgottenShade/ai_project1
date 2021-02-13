@@ -79,13 +79,13 @@ public class Environment {
 			if (y + 1 < s.myMap[0].length-1) {  //see if we are not at black´s end of the map to avoid null pointers
 				//left diagonal
 				if (x > 0) {
-					if (s.myMap[x-1][y+1] != 1) {  //if we are not at the LEFT end of the map then we check if we can go diagonal left
-						moves.add(new Moves(x,y,x-1,y+1)); //if the top left square is either empty or has black piece (not white piece)
+					if (s.myMap[x-1][y+1] == 2) {  //if we are not at the LEFT end of the map then we check if we can go diagonal left
+						moves.add(new Moves(x,y,x-1,y+1)); //if the top left square has black piece 
 					}
 				}
 				//right diagonal
 				if (x < s.myMap.length-1){  //if we are not at the RIGHT end of the map then we check if we can go diagonal right
-					if (s.myMap[x+1][y+1] != 1) { //if the top right square is either empty or has black piece (not white piece)
+					if (s.myMap[x+1][y+1] == 2) { //if the top right square has black piece
 						moves.add(new Moves(x,y,x+1,y+1));
 					}
 				}
@@ -99,13 +99,13 @@ public class Environment {
 			if (y>0) {  //see if we are not at white´s end of the map to avoid null poointers
 				//left diagonal
 				if (x > 0) {  //if we are not at the LEFT end of the map then we check if we can go diagonal left
-					if (s.myMap[x-1][y-1] != 2) {  //if the bottom left square is either empty or has white piece (not black piece)
+					if (s.myMap[x-1][y-1] == 1) {  //if the bottom left square has white piece 
 						moves.add(new Moves(x,y,x-1,y-1));
 					}
 				}
 				//right diagonal
 				if (x < s.myMap.length-1) { //if we are not at the RIGHT end of the map then we check if we can go diagonal right
-					if (s.myMap[x+1][y-1] != 2) { //if the bottom right square is either empty or has white piece (not black piece)
+					if (s.myMap[x+1][y-1] == 1) { //if the bottom right square has white piece
 						moves.add(new Moves(x,y,x+1,y-1));
 					}
 				}
