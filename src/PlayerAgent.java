@@ -83,7 +83,7 @@ public class PlayerAgent implements Agent{
         while (true) { // some loop that goes on until a RuntimeException is thrown.
             try {
                 // do your search here
-                if (_parent_node.isTerminal) {
+                if (_parent_node.state.isTerminal) {
                     return _parent_node.evaluation;
                 }
 

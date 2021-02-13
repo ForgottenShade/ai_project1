@@ -69,6 +69,9 @@ public class Environment {
 				}
 			}
 		}
+		if (moves.isEmpty()){
+			state.isTerminal = true;
+		}
         return moves;
     }
 
