@@ -60,7 +60,7 @@ public class PlayerAgent implements Agent{
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
             //doSearch(c_node, 1);
             minimax(c_node, 3, true); // minimax(c_node, 3, -1000, 1000, true)
-            //System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
+            frontierList = new ArrayList<Node>();//System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
             return current_solution.move.toString();
             
             }
