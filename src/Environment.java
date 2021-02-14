@@ -1,7 +1,4 @@
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,9 +36,9 @@ public class Environment {
     }
 
     //taking the legal moves, generate all possible states
-    public List<Node> legalNodes(Node _node){
+    public ArrayList<Node> legalNodes(Node _node){
 		List<Moves> _legal_moves = legalMoves(_node.state);
-		List<Node> _legal_nodes = new LinkedList<Node>();
+		ArrayList<Node> _legal_nodes = new ArrayList<>();
 
 		for(int i = 0; i < _legal_moves.size(); i++){
 			//State _new_state = _node.state.clone();
@@ -59,12 +56,12 @@ public class Environment {
     public List<Moves> legalMoves(State state) {
         List<Moves> moves = new LinkedList<Moves>();
         
-		for (int i=0; i<map.length; i++) { //column
-			for (int j=0; j<map[0].length; j++) { //row
-				if (state.isWhiteTurn && map[i][j] == 1) {  //if we find a white piece when it is white´s turn
+		for (int i=0; i<state.myMap.length; i++) { //column
+			for (int j=0; j<state.myMap[0].length; j++) { //row
+				if (state.isWhiteTurn && state.myMap[i][j] == 1) {  //if we find a white piece when it is white´s turn
 					moves.addAll(getMoves(state,i,j));  //add all moves if any for that piece
 				}
-				else if (!state.isWhiteTurn && map[i][j] == 2) {  //if it is black´s turn and we found a black piece
+				else if (!state.isWhiteTurn && state.myMap[i][j] == 2) {  //if it is black´s turn and we found a black piece
 					moves.addAll(getMoves(state,i,j));  //add all moves if any for that piece
 				}
 			}
@@ -160,9 +157,9 @@ public class Environment {
             }
         }
         e = whitePieces - blackPieces;
-        if (!s.isWhiteTurn){
-            e = -e; // negate the score
-        }
+        //if (s.isWhiteTurn){
+        //    e = -e; // negate the score
+        //}
         return e;
     }
 

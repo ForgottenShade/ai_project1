@@ -125,7 +125,7 @@ public class Main {
 			//Agent agent = new PlayerAgent();
 			Agent agent = new PlayerAgent();
 
-			int port=4001;
+			int port=Integer.parseInt(args[0]);
 			if(args.length>=1){
 				port=Integer.parseInt(args[0]);
 			}

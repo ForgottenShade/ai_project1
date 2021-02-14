@@ -14,7 +14,6 @@ public class State implements Cloneable {
 		public int width, height;
 		protected short[][] myMap;
 		protected boolean isWhiteTurn;
-		protected int eval;
 		public boolean isTerminal;
 
 
@@ -24,7 +23,6 @@ public class State implements Cloneable {
 			this.width = _width;
 			myMap = new short[width][height]; // the TA has [2][2] instead of width and height... I have no idea why.
 			isWhiteTurn = true;
-			eval = 0; 
 			isTerminal = false;
 		}
 
