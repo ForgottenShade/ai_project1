@@ -40,7 +40,6 @@ public class PlayerAgent implements Agent{
 
     @Override
     public String nextAction(int[] lastMove) {
-        System.out.println(env.currentState);
         if (lastMove != null) {
             int x1 = lastMove[0], y1 = lastMove[1], x2 = lastMove[2], y2 = lastMove[3];
             String roleOfLastPlayer;
@@ -52,9 +51,8 @@ public class PlayerAgent implements Agent{
             System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             // TODO: 1. update your internal world model according to the action that was just executed
             env.updateState(x1 - 1, y1 - 1, x2 - 1, y2 - 1);
-          
-
         }
+        System.out.println(env.currentState);
         myTurn = !myTurn;
         if (myTurn){
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
@@ -74,7 +72,7 @@ public class PlayerAgent implements Agent{
             // -> Minimax with iterative deepening -> Add pruning (alpha-beta search)
             // Remember to always test everything you do as soon as you can do it!!
 
-
+           
             // The format of what has to be returned. 
             // return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
         return "noop";
