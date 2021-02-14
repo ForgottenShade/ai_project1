@@ -142,17 +142,25 @@ public class Environment {
         // example evaluation
         int blackPieces = 0;
         int whitePieces = 0;
-
+		
+		// We could measure the distance from the goal side and add some point for being closer
+		// not really sure how to go about doing that tho.
         for (int i = 0; i < s.myMap.length; i++){ // for each column
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
 					whitePieces++;
+					if (j > 1){ // potential garbagé 
+						whitePieces += s.myMap[0].length - j;
+					}
 					if (j == s.myMap[0].length -1){ // if a white pawn has reached the top, lets act as if there are 100 more pawns... because why the fuck not
 						whitePieces += 100; 
 					}
 				}
                 else if (s.myMap[i][j] == 2){ // Opposite for black
 					blackPieces++;
+					if (j < s.myMap[0].length - 2){ // garbagé? 
+						blackPieces += j - s.myMap[0].length;
+					}
 					if (j == 0){
 						blackPieces += 100; 
 					}
