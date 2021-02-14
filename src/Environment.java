@@ -150,7 +150,7 @@ public class Environment {
                 if (s.myMap[i][j] == 1){
 					whitePieces++;
 					if (j > 1){ // potential garbagé 
-						whitePieces += s.myMap[0].length - j;
+						whitePieces += -(j - s.myMap[0].length);
 					}
 					if (j == s.myMap[0].length -1){ // if a white pawn has reached the top, lets act as if there are 100 more pawns... because why the fuck not
 						whitePieces += 100; 
@@ -159,7 +159,7 @@ public class Environment {
                 else if (s.myMap[i][j] == 2){ // Opposite for black
 					blackPieces++;
 					if (j < s.myMap[0].length - 2){ // garbagé? 
-						blackPieces += j - s.myMap[0].length;
+						blackPieces += -(s.myMap[0].length - j);
 					}
 					if (j == 0){
 						blackPieces += 100; 
