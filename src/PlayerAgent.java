@@ -40,7 +40,7 @@ public class PlayerAgent implements Agent{
 
     @Override
     public String nextAction(int[] lastMove) {
-        System.out.println(env.currentState);
+
         if (lastMove != null) {
             int x1 = lastMove[0], y1 = lastMove[1], x2 = lastMove[2], y2 = lastMove[3];
             String roleOfLastPlayer;
@@ -52,14 +52,14 @@ public class PlayerAgent implements Agent{
             System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             // TODO: 1. update your internal world model according to the action that was just executed
             env.updateState(x1 - 1, y1 - 1, x2 - 1, y2 - 1);
-          
-
         }
+        System.out.println(env.currentState);
+
         myTurn = !myTurn;
         if (myTurn){
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
-            doSearch(c_node, 1);
-            //minimax(c_node, 3, true); // minimax(c_node, 3, -1000, 1000, true)
+            //doSearch(c_node, 1);
+            minimax(c_node, 3, true); // minimax(c_node, 3, -1000, 1000, true)
             //System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
             return current_solution.move.toString();
             
@@ -122,22 +122,24 @@ public class PlayerAgent implements Agent{
         // not great so our agent isn't any smarter for it... if anything this just
         // makes it dumber.
 
+
         // We might have to check how the expansion is happening.
         // And attach runtimeException to this
         if (depth == 0 || position.state.isTerminal){
             return env.eval(position.state);
         }
         // ArrayList<Node> tempFrontier = frontierList; // this garbage is here because of the IOB shit
-        expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh* 
-        if (frontierList.size() > 0){
+        expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh*
+        ArrayList<Node> present_list =  (ArrayList<Node>) frontierList.clone();
+        if (present_list.size() > 0){
             // frontierList = tempFrontier; // // part of the garbage mentioned
             if (maxPlayer){
                 int maxEval = -1000;
-                for (int i = 0; i < frontierList.size(); i++){
-                    int eval = minimax(frontierList.get(i), depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
+                for (int i = 0; i < present_list.size(); i++){
+                    int eval = minimax(present_list.get(i), depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
-                        current_solution = frontierList.get(i); // the thing that causes IOB
+                        current_solution = present_list.get(i); // the thing that causes IOB
                     }
                     // if (eval > alpha){
                     //     alpha = eval;
@@ -150,11 +152,11 @@ public class PlayerAgent implements Agent{
             }
             else {
                 int minEval = 1000;
-                for (int j = 0; j < frontierList.size(); j++){
-                    int eval = minimax(frontierList.get(j), depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
+                for (int j = 0; j < present_list.size(); j++){
+                    int eval = minimax(present_list.get(j), depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
-                        current_solution = frontierList.get(j);
+                        current_solution = present_list.get(j);
                     }
                     // if (eval < beta){
                     //     beta = eval;
