@@ -147,12 +147,15 @@ public class Environment {
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
 					whitePieces++;
-					// if (j == s.myMap[0].length -1){
-					// 	e = 100;
-					// }
+					if (j == s.myMap[0].length -1){ // if a white pawn has reached the top, lets act as if there are 100 more pawns... because why the fuck not
+						whitePieces += 100; 
+					}
 				}
-                else if (s.myMap[i][j] == 2){
+                else if (s.myMap[i][j] == 2){ // Opposite for black
 					blackPieces++;
+					if (j == 0){
+						blackPieces += 100; 
+					}
 				}
             }
         }
