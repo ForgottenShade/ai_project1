@@ -74,7 +74,7 @@ public class PlayerAgent implements Agent{
             // -> Minimax with iterative deepening -> Add pruning (alpha-beta search)
             // Remember to always test everything you do as soon as you can do it!!
 
-
+           
             // The format of what has to be returned. 
             // return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
         return "noop";

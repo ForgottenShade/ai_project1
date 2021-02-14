@@ -149,6 +149,9 @@ public class Environment {
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
 					whitePieces++;
+					// if (j == s.myMap[0].length -1){
+					// 	e = 100;
+					// }
 				}
                 else if (s.myMap[i][j] == 2){
 					blackPieces++;
