@@ -136,7 +136,9 @@ public class PlayerAgent implements Agent{
             if (maxPlayer){
                 int maxEval = -1000;
                 for (int i = 0; i < present_list.size(); i++){
-                    int eval = minimax(present_list.get(i), depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
+                    Node next_node = present_list.get(i);
+                    next_node.state.isWhiteTurn = false;
+                    int eval = minimax(next_node, depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
                         current_solution = present_list.get(i); // the thing that causes IOB
@@ -153,7 +155,9 @@ public class PlayerAgent implements Agent{
             else {
                 int minEval = 1000;
                 for (int j = 0; j < present_list.size(); j++){
-                    int eval = minimax(present_list.get(j), depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
+                    Node next_node = present_list.get(j);
+                    next_node.state.isWhiteTurn = true;
+                    int eval = minimax(next_node, depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
                         current_solution = present_list.get(j);
