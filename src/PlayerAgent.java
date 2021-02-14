@@ -22,7 +22,7 @@ public class PlayerAgent implements Agent{
 
     @Override
     public void init(String role, int width, int height, int playclock) {
-        if(role == "white"){
+        if(role.equals("white")){
             team = Team.WHITE;
             myTurn = true;
         }else{
@@ -33,7 +33,7 @@ public class PlayerAgent implements Agent{
         this.width = width;
         this.height = height;
         this.playclock = playclock;
-        isWhiteTurn = true; 
+        isWhiteTurn = true;
         isTerminalState = false;
         // Initalize the environment and frontier list
         env = new Environment(width, height); 
@@ -57,15 +57,16 @@ public class PlayerAgent implements Agent{
         }
         System.out.println(env.currentState);
 
-        myTurn = !myTurn;
         if (myTurn){
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
             //doSearch(c_node, 1);
-            minimax(c_node, 1, true); // minimax(c_node, 3, -1000, 1000, true)
+            minimax(c_node, 1, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
             frontierList = new ArrayList<Node>();//System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
             isWhiteTurn = !isWhiteTurn;
+            myTurn = !myTurn;
             return current_solution.move.toString();
             }
+        myTurn = !myTurn;
         isWhiteTurn = !isWhiteTurn;
 
              //int alpha = Integer.MAX_VALUE;
@@ -140,7 +141,6 @@ public class PlayerAgent implements Agent{
                 maxEval = -1000;
                 for (int i = 0; i < present_list.size(); i++){
                     Node next_node = present_list.get(i);
-                    next_node.state.isWhiteTurn = false;
                     int eval = minimax(next_node, depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
@@ -159,7 +159,6 @@ public class PlayerAgent implements Agent{
                 minEval = 1000;
                 for (int j = 0; j < present_list.size(); j++){
                     Node next_node = present_list.get(j);
-                    next_node.state.isWhiteTurn = true;
                     int eval = minimax(next_node, depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
@@ -209,7 +208,7 @@ public class PlayerAgent implements Agent{
         }
         // for each available move...
         // update frontier list
-        ArrayList<Node> _legal_nodes = env.legalNodes(_node);
+        ArrayList<Node> _legal_nodes = env.legalNodes(_node, isWhiteTurn);
         frontierList = _legal_nodes;
         // ...
 

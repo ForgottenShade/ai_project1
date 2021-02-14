@@ -13,7 +13,6 @@ public class State implements Cloneable {
 		//public ArrayList<Pawn> pawns_black;
 		public int width, height;
 		protected short[][] myMap;
-		protected boolean isWhiteTurn;
 		public boolean isTerminal;
 
 
@@ -22,13 +21,12 @@ public class State implements Cloneable {
 			this.height = _height;
 			this.width = _width;
 			myMap = new short[width][height]; // the TA has [2][2] instead of width and height... I have no idea why.
-			isWhiteTurn = true;
 			isTerminal = false;
 		}
 
 		public String toString() {
 			System.out.println("myMapLength: " + myMap.length + " , " + myMap[0].length);
-			String toRet = "isWhiteTurn: " + isWhiteTurn;
+			String toRet = "";
 			if (myMap != null && myMap.length > 0 && myMap[0].length > 0){
 				toRet += "\nMap: \n";
 				for (int j = myMap[0].length - 1; j >= 0 ; j--){ // for each row, we have to go from up to down
@@ -65,7 +63,6 @@ public class State implements Cloneable {
 				short[][] newMap = new short[myMap.length][]; // we cannot directly clone 2D arrays so we need to iterate
 				for (int i = 0; i < myMap.length; i++){newMap[i] = myMap[i].clone();};
 				cloned.myMap = newMap;
-				cloned.isWhiteTurn = isWhiteTurn; // make sure to change the current player somewhere
 			} catch (CloneNotSupportedException e) { e.printStackTrace(); System.exit(-1); cloned=null; }
 			return cloned;
 		}

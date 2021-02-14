@@ -36,14 +36,14 @@ public class Environment {
     }
 
     //taking the legal moves, generate all possible states
-    public ArrayList<Node> legalNodes(Node _node){
-		List<Moves> _legal_moves = legalMoves(_node.state);
+    public ArrayList<Node> legalNodes(Node _node, boolean turn){
+		List<Moves> _legal_moves = legalMoves(_node.state, turn);
 		ArrayList<Node> _legal_nodes = new ArrayList<>();
 
 		for(int i = 0; i < _legal_moves.size(); i++){
 			//State _new_state = _node.state.clone();
 			Node _new_node;
-			State _new_state = getNextState(_node.state, _legal_moves.get(i));
+			State _new_state = getNextState(_node.state, _legal_moves.get(i), turn);
 			//_new_state.applyMove(_legal_moves.get(i));
 			_new_node = new Node(_node, _new_state, _legal_moves.get(i), eval(_new_state));
 			_legal_nodes.add(_new_node);
@@ -53,16 +53,16 @@ public class Environment {
 	}
 
     // get all moves for current player
-    public List<Moves> legalMoves(State state) {
+    public List<Moves> legalMoves(State state, boolean turn) {
         List<Moves> moves = new LinkedList<Moves>();
         
 		for (int i=0; i<state.myMap.length; i++) { //column
 			for (int j=0; j<state.myMap[0].length; j++) { //row
-				if (state.isWhiteTurn && state.myMap[i][j] == 1) {  //if we find a white piece when it is white´s turn
-					moves.addAll(getMoves(state,i,j));  //add all moves if any for that piece
+				if (turn && state.myMap[i][j] == 1) {  //if we find a white piece when it is white´s turn
+					moves.addAll(getMoves(state,i,j, turn));  //add all moves if any for that piece
 				}
-				else if (!state.isWhiteTurn && state.myMap[i][j] == 2) {  //if it is black´s turn and we found a black piece
-					moves.addAll(getMoves(state,i,j));  //add all moves if any for that piece
+				else if (!turn && state.myMap[i][j] == 2) {  //if it is black´s turn and we found a black piece
+					moves.addAll(getMoves(state,i,j, turn));  //add all moves if any for that piece
 				}
 			}
 		}
@@ -73,10 +73,10 @@ public class Environment {
     }
 
     // find all moves for piece located at x, y
-    public List<Moves> getMoves(State s, int x, int y) {
+    public List<Moves> getMoves(State s, int x, int y, boolean turn) {
         List<Moves> moves = new LinkedList<Moves>();
         
-		if (s.isWhiteTurn) {  //if it is white we check the row above the piece
+		if (turn) {  //if it is white we check the row above the piece
 			if (y + 1 < s.myMap[0].length-1) {  //see if we are not at black´s end of the map to avoid null pointers
 				//left diagonal
 				if (x > 0) {
@@ -120,10 +120,10 @@ public class Environment {
         return moves;
     }
 
-    public State getNextState(State s, Moves m){
+    public State getNextState(State s, Moves m, boolean turn){
         State c = s.clone();
         // todo
-		if (c.isWhiteTurn) {
+		if (turn) {
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 1;
 		}
