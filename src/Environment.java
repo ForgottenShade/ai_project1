@@ -58,11 +58,13 @@ public class Environment {
         
 		for (int i=0; i<state.myMap.length; i++) { //column
 			for (int j=0; j<state.myMap[0].length; j++) { //row
-				if (turn && state.myMap[i][j] == 1) {  //if we find a white piece when it is white´s turn
-					moves.addAll(getMoves(state,i,j, turn));  //add all moves if any for that piece
+				// add moves for white piece
+				if (turn && state.myMap[i][j] == 1) {
+					moves.addAll(getMoves(state,i,j, turn));
 				}
-				else if (!turn && state.myMap[i][j] == 2) {  //if it is black´s turn and we found a black piece
-					moves.addAll(getMoves(state,i,j, turn));  //add all moves if any for that piece
+				// add moves for black piece
+				else if (!turn && state.myMap[i][j] == 2) {  
+					moves.addAll(getMoves(state,i,j, turn)); 
 				}
 			}
 		}
@@ -72,46 +74,51 @@ public class Environment {
         return moves;
     }
 
-    // find all moves for piece located at x, y
+    // find all moves
     public List<Moves> getMoves(State s, int x, int y, boolean turn) {
         List<Moves> moves = new LinkedList<Moves>();
-        
-		if (turn) {  //if it is white we check the row above the piece
-			if (y + 1 < s.myMap[0].length-1) {  //see if we are not at black´s end of the map to avoid null pointers
-				//left diagonal
+        // white starts at the bottom of the board
+		if (turn) {  
+			// make sure we are inside the board
+			if (y + 1 < s.myMap[0].length-1) { 
+				//chek if left diagonal capture is possible
 				if (x > 0) {
-					if (s.myMap[x-1][y+1] == 2) {  //if we are not at the LEFT end of the map then we check if we can capture to the left
-						moves.add(new Moves(x,y,x-1,y+1)); //if the top left square has black piece 
+					if (s.myMap[x-1][y+1] == 2) {
+						// add move is cell does contain a black piece  
+						moves.add(new Moves(x,y,x-1,y+1)); 
 					}
 				}
-				//right diagonal
-				if (x < s.myMap.length-1){  //if we are not at the RIGHT end of the map then we check if we can capture to the right
-					if (s.myMap[x+1][y+1] == 2) { //if the top right square has black piece
+				//check if right diagonal capture is possible
+				if (x < s.myMap.length-1){  
+					if (s.myMap[x+1][y+1] == 2) { 
+						// add if move if cell does contain a white piece
 						moves.add(new Moves(x,y,x+1,y+1));
 					}
 				}
-				//forward
-				if (s.myMap[x][y+1] == 0) {  //if the square in front of us is empty
+				// check if forward move is possible
+				if (s.myMap[x][y+1] == 0) {  
+					// add move if cell is empty
 					moves.add(new Moves(x,y,x,y+1));
 				}
 			}
 		}
 		else{
-			if (y>0) {  //see if we are not at white´s end of the map to avoid null poointers
-				//left diagonal
-				if (x > 0) {  //if we are not at the LEFT end of the map then we check if we can capture to the left
-					if (s.myMap[x-1][y-1] == 1) {  //if the bottom left square has white piece 
+			// opposite logic for black player
+			if (y>0) { 
+				//left diagonal capture
+				if (x > 0) { 
+					if (s.myMap[x-1][y-1] == 1) {  
 						moves.add(new Moves(x,y,x-1,y-1));
 					}
 				}
-				//right diagonal
-				if (x < s.myMap.length-1) { //if we are not at the RIGHT end of the map then we check if we can capture to the right
-					if (s.myMap[x+1][y-1] == 1) { //if the bottom right square has white piece
+				//right diagonal capture
+				if (x < s.myMap.length-1) { 
+					if (s.myMap[x+1][y-1] == 1) {
 						moves.add(new Moves(x,y,x+1,y-1));
 					}
 				}
-				//forward
-				if(s.myMap[x][y-1] == 0) {  //if the square below is empty
+				//check if forward move is possible (backwards)
+				if(s.myMap[x][y-1] == 0) {  
 					moves.add(new Moves(x,y,x,y-1));
 				}
 			}
