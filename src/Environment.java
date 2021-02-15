@@ -99,7 +99,7 @@ public class Environment {
 		else{
 			if (y>0) {  //see if we are not at white´s end of the map to avoid null poointers
 				//left diagonal
-				if (x > 0) {  //if we are not at the LEFT end of the map then we check if we can caputre to the left
+				if (x > 0) {  //if we are not at the LEFT end of the map then we check if we can capture to the left
 					if (s.myMap[x-1][y-1] == 1) {  //if the bottom left square has white piece 
 						moves.add(new Moves(x,y,x-1,y-1));
 					}
@@ -126,14 +126,14 @@ public class Environment {
 		if (turn) {
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 1;
-			if (m.y2 == c.myMap[0].length - 1) {
+			if (m.y2 == c.myMap[0].length - 1) { // If a white pawn has reached the top the state is terminal
 				c.isTerminal = true; 
 			}
 		}
 		else{
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 2;
-			if (m.y2 == 0){
+			if (m.y2 == 0){ // If a black pawn has reached the bottom the state is terminal
 				c.isTerminal = true; 
 			}
 		}
@@ -148,26 +148,21 @@ public class Environment {
         // example evaluation
         int blackPieces = 0;
         int whitePieces = 0;
-		
-		// We could measure the distance from the goal side and add some point for being closer
-		// not really sure how to go about doing that tho.
-
-		// Maybe deduct point if an opponent piece gets too close
 
         for (int i = 0; i < s.myMap.length; i++){ // for each column
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
 					whitePieces++;
-					if (j > 1){ // potential garbagé 
+					if (j > 1){ // The close a white pawn is to the top gives more points
 						whitePieces += j;
 					}
-					if (j == s.myMap[0].length -1){ // if a white pawn has reached the top, lets act as if there are 100 more pawns... because why the fuck not
+					if (j == s.myMap[0].length -1){ // 100 points given if a white pawn reaches the top
 						whitePieces += 100; 
 					}
 				}
                 else if (s.myMap[i][j] == 2){ // Opposite for black
 					blackPieces++;
-					if (j < s.myMap[0].length - 2){ // garbagé? 
+					if (j < s.myMap[0].length - 2){ 
 						blackPieces += -(s.myMap[0].length - j);
 					}
 					if (j == 0){

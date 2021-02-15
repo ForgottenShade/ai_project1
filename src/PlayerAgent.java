@@ -61,7 +61,7 @@ public class PlayerAgent implements Agent{
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
             //doSearch(c_node, 1);
             minimax(c_node, 1, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
-            frontierList = new ArrayList<Node>();//System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
+            frontierList = new ArrayList<Node>();
             isWhiteTurn = !isWhiteTurn;
             myTurn = !myTurn;
             return current_solution.move.toString();
@@ -119,32 +119,21 @@ public class PlayerAgent implements Agent{
         }
     }
 
-    // BEHOLD! ~The Garbagé~
     public int minimax(Node position, int depth, boolean maxPlayer){ // (Node postition, int depth, int alpha, int beta, boolean maxPlayer)
-        // sooo.... this sometimes doesn't work... because of indexOutOfBounds things
-        // and what not. BUT it sometimes does work...... but the evaluations is still
-        // not great so our agent isn't any smarter for it... if anything this just
-        // makes it dumber.
-
-
-        // We might have to check how the expansion is happening.
-        // And attach runtimeException to this
         if (depth == 0 || position.state.isTerminal){
             return env.eval(position.state);
         }
-        // ArrayList<Node> tempFrontier = frontierList; // this garbage is here because of the IOB shit
-        expandNode(position); // Doesn't fix anything but it was worth a shot... *sigh*
+        expandNode(position);
         ArrayList<Node> present_list =  (ArrayList<Node>) frontierList.clone();
         if (present_list.size() > 0){
-            // frontierList = tempFrontier; // // part of the garbage mentioned
             if (maxPlayer){
                 maxEval = -1000;
                 for (int i = 0; i < present_list.size(); i++){
                     Node next_node = present_list.get(i);
-                    int eval = minimax(next_node, depth - 1, false); // (frontierList.get(i), depth - 1, alpha, beta, false)
+                    int eval = minimax(next_node, depth - 1, false); // (next_node, depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
-                        current_solution = present_list.get(i); // the thing that causes IOB
+                        current_solution = present_list.get(i); 
                     }
                     // if (eval > alpha){
                     //     alpha = eval;
@@ -159,7 +148,7 @@ public class PlayerAgent implements Agent{
                 minEval = 1000;
                 for (int j = 0; j < present_list.size(); j++){
                     Node next_node = present_list.get(j);
-                    int eval = minimax(next_node, depth - 1, true); // (frontierList.get(i), depth - 1, alpha, beta, true)
+                    int eval = minimax(next_node, depth - 1, true); // (next_node, depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
                         current_solution = present_list.get(j);

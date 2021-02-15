@@ -20,7 +20,7 @@ public class State implements Cloneable {
 			//initialize the starting state of the game
 			this.height = _height;
 			this.width = _width;
-			myMap = new short[width][height]; // the TA has [2][2] instead of width and height... I have no idea why.
+			myMap = new short[width][height]; 
 			isTerminal = false;
 		}
 
