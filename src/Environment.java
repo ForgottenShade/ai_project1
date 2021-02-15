@@ -120,21 +120,27 @@ public class Environment {
         return moves;
     }
 
-    public State getNextState(State s, Moves m, boolean turn){
+	public State getNextState(State s, Moves m, boolean turn){
         State c = s.clone();
         // todo
 		if (turn) {
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 1;
+			if (m.y2 == c.myMap[0].length - 1) {
+				c.isTerminal = true; 
+			}
 		}
 		else{
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 2;
+			if (m.y2 == 0){
+				c.isTerminal = true; 
+			}
 		}
 		//c.eval = eval(c);
         return c;
     }
-
+	
     public int eval(State s) {
         // Set your own evaluation here
         // this should not be done prior to State and Environment
