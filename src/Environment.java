@@ -58,11 +58,13 @@ public class Environment {
         
 		for (int i=0; i<state.myMap.length; i++) { //column
 			for (int j=0; j<state.myMap[0].length; j++) { //row
-				if (turn && state.myMap[i][j] == 1) {  //if we find a white piece when it is white´s turn
-					moves.addAll(getMoves(state,i,j, turn));  //add all moves if any for that piece
+				// add moves for white piece
+				if (turn && state.myMap[i][j] == 1) {
+					moves.addAll(getMoves(state,i,j, turn));
 				}
-				else if (!turn && state.myMap[i][j] == 2) {  //if it is black´s turn and we found a black piece
-					moves.addAll(getMoves(state,i,j, turn));  //add all moves if any for that piece
+				// add moves for black piece
+				else if (!turn && state.myMap[i][j] == 2) {  
+					moves.addAll(getMoves(state,i,j, turn)); 
 				}
 			}
 		}
@@ -72,46 +74,51 @@ public class Environment {
         return moves;
     }
 
-    // find all moves for piece located at x, y
+    // find all moves
     public List<Moves> getMoves(State s, int x, int y, boolean turn) {
         List<Moves> moves = new LinkedList<Moves>();
-        
-		if (turn) {  //if it is white we check the row above the piece
-			if (y + 1 < s.myMap[0].length-1) {  //see if we are not at black´s end of the map to avoid null pointers
-				//left diagonal
+        // white starts at the bottom of the board
+		if (turn) {  
+			// make sure we are inside the board
+			if (y + 1 < s.myMap[0].length-1) { 
+				//chek if left diagonal capture is possible
 				if (x > 0) {
-					if (s.myMap[x-1][y+1] == 2) {  //if we are not at the LEFT end of the map then we check if we can capture to the left
-						moves.add(new Moves(x,y,x-1,y+1)); //if the top left square has black piece 
+					if (s.myMap[x-1][y+1] == 2) {
+						// add move is cell does contain a black piece  
+						moves.add(new Moves(x,y,x-1,y+1)); 
 					}
 				}
-				//right diagonal
-				if (x < s.myMap.length-1){  //if we are not at the RIGHT end of the map then we check if we can capture to the right
-					if (s.myMap[x+1][y+1] == 2) { //if the top right square has black piece
+				//check if right diagonal capture is possible
+				if (x < s.myMap.length-1){  
+					if (s.myMap[x+1][y+1] == 2) { 
+						// add if move if cell does contain a white piece
 						moves.add(new Moves(x,y,x+1,y+1));
 					}
 				}
-				//forward
-				if (s.myMap[x][y+1] == 0) {  //if the square in front of us is empty
+				// check if forward move is possible
+				if (s.myMap[x][y+1] == 0) {  
+					// add move if cell is empty
 					moves.add(new Moves(x,y,x,y+1));
 				}
 			}
 		}
 		else{
-			if (y>0) {  //see if we are not at white´s end of the map to avoid null poointers
-				//left diagonal
-				if (x > 0) {  //if we are not at the LEFT end of the map then we check if we can caputre to the left
-					if (s.myMap[x-1][y-1] == 1) {  //if the bottom left square has white piece 
+			// opposite logic for black player
+			if (y>0) { 
+				//left diagonal capture
+				if (x > 0) { 
+					if (s.myMap[x-1][y-1] == 1) {  
 						moves.add(new Moves(x,y,x-1,y-1));
 					}
 				}
-				//right diagonal
-				if (x < s.myMap.length-1) { //if we are not at the RIGHT end of the map then we check if we can capture to the right
-					if (s.myMap[x+1][y-1] == 1) { //if the bottom right square has white piece
+				//right diagonal capture
+				if (x < s.myMap.length-1) { 
+					if (s.myMap[x+1][y-1] == 1) {
 						moves.add(new Moves(x,y,x+1,y-1));
 					}
 				}
-				//forward
-				if(s.myMap[x][y-1] == 0) {  //if the square below is empty
+				//check if forward move is possible (backwards)
+				if(s.myMap[x][y-1] == 0) {  
 					moves.add(new Moves(x,y,x,y-1));
 				}
 			}
@@ -120,21 +127,27 @@ public class Environment {
         return moves;
     }
 
-    public State getNextState(State s, Moves m, boolean turn){
+	public State getNextState(State s, Moves m, boolean turn){
         State c = s.clone();
         // todo
 		if (turn) {
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 1;
+			if (m.y2 == c.myMap[0].length - 1) { // If a white pawn has reached the top the state is terminal
+				c.isTerminal = true; 
+			}
 		}
 		else{
 			c.myMap[m.x][m.y] = 0;
 			c.myMap[m.x2][m.y2] = 2;
+			if (m.y2 == 0){ // If a black pawn has reached the bottom the state is terminal
+				c.isTerminal = true; 
+			}
 		}
 		//c.eval = eval(c);
         return c;
     }
-
+	
     public int eval(State s) {
         // Set your own evaluation here
         // this should not be done prior to State and Environment
@@ -142,23 +155,21 @@ public class Environment {
         // example evaluation
         int blackPieces = 0;
         int whitePieces = 0;
-		
-		// We could measure the distance from the goal side and add some point for being closer
-		// not really sure how to go about doing that tho.
+
         for (int i = 0; i < s.myMap.length; i++){ // for each column
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
 					whitePieces++;
-					if (j > 1){ // potential garbagé 
-						whitePieces += -(j - s.myMap[0].length);
+					if (j > 1){ // The close a white pawn is to the top gives more points
+						whitePieces += j;
 					}
-					if (j == s.myMap[0].length -1){ // if a white pawn has reached the top, lets act as if there are 100 more pawns... because why the fuck not
+					if (j == s.myMap[0].length -1){ // 100 points given if a white pawn reaches the top
 						whitePieces += 100; 
 					}
 				}
                 else if (s.myMap[i][j] == 2){ // Opposite for black
 					blackPieces++;
-					if (j < s.myMap[0].length - 2){ // garbagé? 
+					if (j < s.myMap[0].length - 2){ 
 						blackPieces += -(s.myMap[0].length - j);
 					}
 					if (j == 0){
