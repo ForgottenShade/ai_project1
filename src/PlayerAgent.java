@@ -42,6 +42,7 @@ public class PlayerAgent implements Agent{
 
     @Override
     public String nextAction(int[] lastMove) {
+        long startTime = System.currentTimeMillis();
 
         if (lastMove != null) {
             int x1 = lastMove[0], y1 = lastMove[1], x2 = lastMove[2], y2 = lastMove[3];
@@ -60,8 +61,14 @@ public class PlayerAgent implements Agent{
         if (myTurn){
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
             //doSearch(c_node, 1);
-            minimax(c_node, 1, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
-            frontierList = new ArrayList<Node>();//System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
+            int depth = 1;
+            while(System.currentTimeMillis() - startTime < playclock * 1000){
+                minimax(c_node, depth, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
+                frontierList = new ArrayList<Node>();
+                depth++;
+            }
+            //minimax(c_node, 1, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
+            //frontierList = new ArrayList<Node>();//System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
             isWhiteTurn = !isWhiteTurn;
             myTurn = !myTurn;
             return current_solution.move.toString();
