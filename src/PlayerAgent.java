@@ -14,9 +14,7 @@ public class PlayerAgent implements Agent{
     private boolean isTerminalState;
     private Environment env;
     private ArrayList<Node> frontierList;
-    private int sizeOfTable = 1000;
     private Node current_solution = null;
-    private AdversarialSearch minimax;
     private int maxEval = -1000;
     private int minEval = 1000;
 
@@ -60,87 +58,57 @@ public class PlayerAgent implements Agent{
 
         if (myTurn){
             Node c_node = new Node(env.currentState, env.eval(env.currentState));
-            //doSearch(c_node, 1);
+            Node best_node = null;
             int depth = 1;
-            while(System.currentTimeMillis() - startTime < playclock * 1000){
-                minimax(c_node, depth, -1000, 1000, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
+            while(System.currentTimeMillis() - startTime < (playclock * 1000) - 10 && depth < 4){
+                minimax(c_node, depth, -1000, 1000, isWhiteTurn, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
                 frontierList = new ArrayList<Node>();
+                if (best_node == null){
+                    best_node = current_solution;
+                }
+                if (isWhiteTurn){
+                    if (current_solution.evaluation > best_node.evaluation){
+                        best_node = current_solution;
+                    }
+                }
+                else {
+                    if (current_solution.evaluation < best_node.evaluation){
+                        best_node = current_solution;
+                    }
+                }
+                
+                System.out.println(best_node.evaluation);
                 depth++;
             }
-            //minimax(c_node, 1, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
-            //frontierList = new ArrayList<Node>();//System.out.println("Doing minimax. Best move: " + current_solution.move.toString() + " With eval of: " + env.eval(current_solution.state));
+    
             isWhiteTurn = !isWhiteTurn;
             myTurn = !myTurn;
-            return current_solution.move.toString();
-            }
+            return best_node.move.toString();
+        }
         myTurn = !myTurn;
         isWhiteTurn = !isWhiteTurn;
 
-             //int alpha = Integer.MAX_VALUE;
-            //int beta = -Integer.MAX_VALUE; // you cannot do Integer.Min_Value since if you do -MinValue you will overflow the buffer.
-            // TODO: 2. run alpha-beta search to determine the best move
-            // look at RandomAgent to understand what to return
-            // You should start with something "simple" Like DFS
-            // Then go add on it more, For example: DFS -> DFS with iterative deepening
-            // -> Minimax with iterative deepening -> Add pruning (alpha-beta search)
-            // Remember to always test everything you do as soon as you can do it!!
-
-           
-            // The format of what has to be returned. 
-            // return "(move " + x1 + " " + y1 + " " + x2 + " " + y2 + ")";
         return "noop";
     }
 
-    public int doSearch(Node _parent_node,int depth){
-        int value;
-        int bestVal = 0;
-
-        while (true) { // some loop that goes on until a RuntimeException is thrown.
-            try {
-                // do your search here
-                if (_parent_node.state.isTerminal) {
-                    return env.eval(_parent_node.state);
-                }
-
-                expandNode(_parent_node);
-
-                for(int i = 0; i < depth; i++) {
-                    for (int j = 0; j < frontierList.size(); j++) {
-                        if(current_solution == null){
-                            current_solution = frontierList.get(j);
-                        }
-
-                        value = doSearch(frontierList.get(j), depth);
-                        if(value > bestVal){
-                            bestVal = value;
-                            current_solution = frontierList.get(j);
-                        }
-                    }
-                }
-
-                depth++;
-                return bestVal;
-            } catch (RuntimeException e) {
-                return bestVal;
-            }
-        }
-    }
-
-    public int minimax(Node position, int depth, int alpha, int beta, boolean maxPlayer){ // 
+    public int minimax(Node position, int depth, int alpha, int beta, boolean maxPlayer, boolean actPlayer){ // 
         if (depth == 0 || position.state.isTerminal){
             return env.eval(position.state);
         }
-        expandNode(position);
+        expandNode(position, maxPlayer);
         ArrayList<Node> present_list =  (ArrayList<Node>) frontierList.clone();
         if (present_list.size() > 0){
             if (maxPlayer){
                 maxEval = -1000;
                 for (int i = 0; i < present_list.size(); i++){
                     Node next_node = present_list.get(i);
-                    int eval = minimax(next_node, depth - 1, alpha, beta, false); // (next_node, depth - 1, alpha, beta, false)
+                    int eval = minimax(next_node, depth - 1, alpha, beta, false, actPlayer); // (next_node, depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
-                        current_solution = present_list.get(i); 
+                        if(actPlayer){
+                          current_solution = present_list.get(i);
+                        }
+                        System.out.println("In minimax - maxPlayer. current_solution: " + current_solution.move);
                     }
                     if (eval > alpha){
                         alpha = eval;
@@ -155,10 +123,13 @@ public class PlayerAgent implements Agent{
                 minEval = 1000;
                 for (int j = 0; j < present_list.size(); j++){
                     Node next_node = present_list.get(j);
-                    int eval = minimax(next_node, depth - 1, alpha, beta, true); // (next_node, depth - 1, alpha, beta, true)
+                    int eval = minimax(next_node, depth - 1, alpha, beta, true, actPlayer); // (next_node, depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
-                        current_solution = present_list.get(j);
+                        if (!actPlayer){
+                            current_solution = present_list.get(j);
+                        }
+                        System.out.println("In minimax - minPlayer. current_solution: " + current_solution.move);
                     }
                     if (eval < beta){
                         beta = eval;
@@ -173,38 +144,14 @@ public class PlayerAgent implements Agent{
         return env.eval(position.state);
     }
 
-    public Node findNextNodeToExpand() {
-        if (frontierList.isEmpty()){
-            System.out.println("MyAgent : findNextNodeToExpand() -> frontierList is empty");
-            return null;
-        }
-        else{
-            // todo
-            // this presently gets the node with the best evaluation as in a* before using dfs and iterative deepening upon that node
-            int best_val = 0;
-            Node best_node = null;
-            for(int i = 0; i < frontierList.size(); i++){
-                Node _node = frontierList.get(i);
-                if(best_node == null){
-                    best_node = _node;
-                    best_val = env.eval(_node.state);
-                }else if(env.eval(_node.state) < best_val){
-                    best_node = _node;
-                    best_val = env.eval(_node.state);
-                }
-            }
-            return best_node;
-        }
-    }
-
-    public void expandNode(Node _node) {
+    public void expandNode(Node _node, boolean turn) {
         boolean isTimeUp = false; // of course change this
         if (isTimeUp){
             throw new RuntimeException();
         }
         // for each available move...
         // update frontier list
-        ArrayList<Node> _legal_nodes = env.legalNodes(_node, isWhiteTurn);
+        ArrayList<Node> _legal_nodes = env.legalNodes(_node, turn);
         frontierList = _legal_nodes;
         // ...
 
@@ -221,7 +168,5 @@ public class PlayerAgent implements Agent{
         this.env = null;
         this.frontierList = null;
         this.isWhiteTurn = false;
-        this.sizeOfTable = -1;
-
     }
 }

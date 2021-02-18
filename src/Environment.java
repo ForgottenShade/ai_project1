@@ -159,7 +159,7 @@ public class Environment {
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
 					whitePieces++;
-					if (j > 1){ // The close a white pawn is to the top gives more points
+					if (j > 1){ // The closer a white pawn is to the top gives more points
 						whitePieces += j;
 					}
 					if (j == s.myMap[0].length -1){ // 100 points given if a white pawn reaches the top
@@ -180,7 +180,7 @@ public class Environment {
         e = whitePieces - blackPieces;
         //if (s.isWhiteTurn){
         //    e = -e; // negate the score
-        //}
+        // }
         return e;
     }
 
