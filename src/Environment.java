@@ -80,7 +80,7 @@ public class Environment {
         // white starts at the bottom of the board
 		if (turn) {  
 			// make sure we are inside the board
-			if (y + 1 < s.myMap[0].length-1) { 
+			if (y + 1 < s.myMap[0].length) { 
 				//chek if left diagonal capture is possible
 				if (x > 0) {
 					if (s.myMap[x-1][y+1] == 2) {
@@ -155,7 +155,6 @@ public class Environment {
         // example evaluation
         int blackPieces = 0;
         int whitePieces = 0;
-
         for (int i = 0; i < s.myMap.length; i++){ // for each column
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
