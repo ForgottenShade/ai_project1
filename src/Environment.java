@@ -153,31 +153,31 @@ public class Environment {
         // this should not be done prior to State and Environment
         int e = 0;
         // example evaluation
-        int blackPieces = 0;
-        int whitePieces = 0;
+        int blackPoints = 0;
+        int whitePoints = 0;
         for (int i = 0; i < s.myMap.length; i++){ // for each column
             for (int j = 0; j < s.myMap[0].length; j++){ // for each row
                 if (s.myMap[i][j] == 1){
-					whitePieces++;
+					whitePoints += 10;
 					if (j > 1){ // The closer a white pawn is to the top gives more points
-						whitePieces += j;
+						whitePoints += j;
 					}
 					if (j == s.myMap[0].length -1){ // 100 points given if a white pawn reaches the top
-						whitePieces += 100; 
+						whitePoints += 100; 
 					}
 				}
                 else if (s.myMap[i][j] == 2){ // Opposite for black
-					blackPieces++;
-					if (j < s.myMap[0].length - 2){ 
-						blackPieces += -(s.myMap[0].length - j);
+					blackPoints += 10;
+					if (j < s.myMap[0].length - 1){ 
+						blackPoints += -(s.myMap[0].length - j);
 					}
 					if (j == 0){
-						blackPieces += 100; 
+						blackPoints += 100; 
 					}
 				}
             }
         }
-        e = whitePieces - blackPieces;
+        e = whitePoints - blackPoints;
         //if (s.isWhiteTurn){
         //    e = -e; // negate the score
         // }
