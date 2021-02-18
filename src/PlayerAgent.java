@@ -63,7 +63,7 @@ public class PlayerAgent implements Agent{
             //doSearch(c_node, 1);
             int depth = 1;
             while(System.currentTimeMillis() - startTime < playclock * 1000){
-                minimax(c_node, depth, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
+                minimax(c_node, depth, -1000, 1000, isWhiteTurn); // minimax(c_node, 3, -1000, 1000, true)
                 frontierList = new ArrayList<Node>();
                 depth++;
             }
@@ -126,7 +126,7 @@ public class PlayerAgent implements Agent{
         }
     }
 
-    public int minimax(Node position, int depth, boolean maxPlayer){ // (Node postition, int depth, int alpha, int beta, boolean maxPlayer)
+    public int minimax(Node position, int depth, int alpha, int beta, boolean maxPlayer){ // 
         if (depth == 0 || position.state.isTerminal){
             return env.eval(position.state);
         }
@@ -137,17 +137,17 @@ public class PlayerAgent implements Agent{
                 maxEval = -1000;
                 for (int i = 0; i < present_list.size(); i++){
                     Node next_node = present_list.get(i);
-                    int eval = minimax(next_node, depth - 1, false); // (next_node, depth - 1, alpha, beta, false)
+                    int eval = minimax(next_node, depth - 1, alpha, beta, false); // (next_node, depth - 1, alpha, beta, false)
                     if (eval > maxEval){
                         maxEval = eval;
                         current_solution = present_list.get(i); 
                     }
-                    // if (eval > alpha){
-                    //     alpha = eval;
-                    // }
-                    // if (beta <= alpha){
-                    //     break;
-                    // }
+                    if (eval > alpha){
+                        alpha = eval;
+                    }
+                    if (beta <= alpha){
+                        break;
+                    }
                 }
                 return maxEval;
             }
@@ -155,17 +155,17 @@ public class PlayerAgent implements Agent{
                 minEval = 1000;
                 for (int j = 0; j < present_list.size(); j++){
                     Node next_node = present_list.get(j);
-                    int eval = minimax(next_node, depth - 1, true); // (next_node, depth - 1, alpha, beta, true)
+                    int eval = minimax(next_node, depth - 1, alpha, beta, true); // (next_node, depth - 1, alpha, beta, true)
                     if (eval < minEval){
                         minEval = eval;
                         current_solution = present_list.get(j);
                     }
-                    // if (eval < beta){
-                    //     beta = eval;
-                    // }
-                    // if (beta <= alpha){
-                    //     break;
-                    // }
+                    if (eval < beta){
+                        beta = eval;
+                    }
+                    if (beta <= alpha){
+                        break;
+                    }
                 }
                 return minEval;
             }
