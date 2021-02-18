@@ -76,8 +76,6 @@ public class PlayerAgent implements Agent{
                         best_node = current_solution;
                     }
                 }
-                
-                System.out.println(best_node.evaluation);
                 depth++;
             }
     
@@ -108,7 +106,6 @@ public class PlayerAgent implements Agent{
                         if(actPlayer){
                           current_solution = present_list.get(i);
                         }
-                        System.out.println("In minimax - maxPlayer. current_solution: " + current_solution.move);
                     }
                     if (eval > alpha){
                         alpha = eval;
@@ -129,7 +126,6 @@ public class PlayerAgent implements Agent{
                         if (!actPlayer){
                             current_solution = present_list.get(j);
                         }
-                        System.out.println("In minimax - minPlayer. current_solution: " + current_solution.move);
                     }
                     if (eval < beta){
                         beta = eval;
