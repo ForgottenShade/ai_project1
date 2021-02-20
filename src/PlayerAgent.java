@@ -86,6 +86,13 @@ public class PlayerAgent implements Agent{
         myTurn = !myTurn;
         isWhiteTurn = !isWhiteTurn;
 
+        if(current_solution != null){
+            if(env.currentState.isTerminal || current_solution.state.isTerminal){
+                cleanup();
+            }
+        }else if (env.currentState.isTerminal){
+            cleanup();
+        }
         return "noop";
     }
 
@@ -156,13 +163,16 @@ public class PlayerAgent implements Agent{
     @Override
     public void cleanup() {
         // TODO: cleanup so that he agent is ready for the next match
-        this.team = null;
-        this.playclock = -1;
-        this.height = -1;
-        this.width = -1;
-        this.myTurn = false;
-        this.env = null;
-        this.frontierList = null;
-        this.isWhiteTurn = false;
+        if(team == Team.BLACK){
+            myTurn = false;
+        }else{
+            myTurn = true;
+        }
+
+        isWhiteTurn = true;
+        isTerminalState = false;
+        // Initalize the environment and frontier list
+        env = new Environment(width, height);
+        frontierList = new ArrayList<Node>();
     }
 }
